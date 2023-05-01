@@ -45,6 +45,20 @@ def hist_filter_ci_68(data):
     filtered_hist_data = data[(data['Biogas_ft3/cow'] >= Y_lower) & (data['Biogas_ft3/cow'] <= Y_upper)]
     return filtered_hist_data
 ```
+Dairy- all digester types
+![Octocat](histo.png)
+
+Dairy- Plug flow
+![Octocat](Plug histo.png)
+
+Dairy- Complete mix
+![Octocat](CM histo.png)
+
+Dairy- Impermeable cover
+![Octocat](IC histo.png)
+
+Dairy- Plug flow and complete mix (heated anaerobic digesters)
+![Octocat](CM and Plug histo.png)
 
 ```js
 df[' Biogas Generation Estimate (cu_ft/day) ']=df[' Biogas Generation Estimate (cu_ft/day) '].str.replace(',','')
@@ -59,6 +73,15 @@ df = df.astype({'Swine':'int'})
 ```
 
 ```js
+dairy_biogas2 = smf.ols(formula='Biogas_gen_ft3_day ~ Dairy', data=dairy_biogas).fit()
+sns.regplot('Dairy', 'Biogas_gen_ft3_day', data=dairy_biogas, ci =95)
+```
+
+![Branching](All dairy regression.png)
+
+![Branching](OLS all dairy regression results.png)
+
+```js
 sns.regplot('Dairy', 'Biogas_gen_ft3_day', data=dairy_biogas, ci = 95)
 
 Y_upper_dairy_biogas = dairy_biogas['Dairy']*91.174+.000614
@@ -70,6 +93,8 @@ plt.scatter(dairy_biogas['Dairy'], Y_lower_dairy_biogas, color = 'red')
 
 plt.show
 ```
+![Branching](95% CI all dairy.png)
+
 
 ```js
 def filter_confidence_interval(data):
@@ -235,7 +260,6 @@ biogas_pred_rf(3,5000)
 
 ### Small image
 
-![Octocat](histo.png)
 
 ### Large image
 
