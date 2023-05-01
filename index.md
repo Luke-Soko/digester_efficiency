@@ -32,8 +32,8 @@ Operating covered lagoon digester. Feedstock is not heated or mixed and typicall
 ![Octocat](Covered_lagoon.png)
 
 The capital cost varies among these three digester types, though their biogas production varies as well. 
-My first question is- what is the digestion efficiency of each type of digester? 
-My second question is- given a number of livestock and digester type, what is the daily biogas production?
+My first question: what is the digestion efficiency of each type of digester? 
+My second question: given a number of livestock and digester type, what is the daily biogas production?
 
 
 I calculate the efficiency at which each digester type generates biogas using the EPA Agstar Digester Database
