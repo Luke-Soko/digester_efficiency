@@ -55,7 +55,7 @@ Manure production can be found in ASAE D384.2 MAR2005 Manure Production and Char
 
 After uploading the AgSTAR Anaerobic Digestion Database to python, the database should look similar to picture below.
 
-![Octocat](screenshot_datatable.png)
+![Octocat](Screenshot_datatable.png)
 
 To work with the data in Python, I had to remove commas within the data and reassign some string values as integer values.
 ```js
