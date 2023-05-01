@@ -2,13 +2,9 @@ Text can be **bold**, _italic_, or ~~strikethrough~~.
 
 [Link to another page](./another-page.html).
 
-There should be whitespace between paragraphs.
+# ABE 516X Final Project- Anaerobic Digestion Efficiency
 
-There should be whitespace between paragraphs. We recommend including a README, or a file with information about your project.
-
-# Header 1
-
-This is a normal paragraph following a header. GitHub is a code hosting platform for version control and collaboration. It lets you and others work together on projects from anywhere.
+Hi, welcome to my (Luke Soko) final project for ABE 516X. There are ~2,000,000 farms across the US, but only ~330 operating manure-based anaerobic digesters. Why? They're historically unprofitable (until recently for specific scenarios). My research models anaerobic digestion profitability. My goal is to publish profitable scenarios for anaerobic digester use to stimulate anaerobic digester implementation and reduce agricultural greenhouse gas emissions.
 
 ## Header 2
 
@@ -17,6 +13,11 @@ This is a normal paragraph following a header. GitHub is a code hosting platform
 > When something is important enough, you do it even if the odds are not in your favor.
 
 ### Header 3
+
+Text can be **bold**, _italic_, or ~~strikethrough~~.
+
+[Link to another page](./another-page.html).
+
 
 ```js
 def efficiency(data_dairy):
