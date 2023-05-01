@@ -46,19 +46,24 @@ def hist_filter_ci_68(data):
     return filtered_hist_data
 ```
 Dairy- all digester types
+
 ![Octocat](histo.png)
 
 Dairy- Plug flow
-![Octocat](Plug histo.png)
+
+![Octocat](Plug_histo.png)
 
 Dairy- Complete mix
-![Octocat](CM histo.png)
+
+![Octocat](CM_histo.png)
 
 Dairy- Impermeable cover
-![Octocat](IC histo.png)
+
+![Octocat](IC_histo.png)
 
 Dairy- Plug flow and complete mix (heated anaerobic digesters)
-![Octocat](CM and Plug histo.png)
+
+![Octocat](CM_and_Plug_histo.png)
 
 ```js
 df[' Biogas Generation Estimate (cu_ft/day) ']=df[' Biogas Generation Estimate (cu_ft/day) '].str.replace(',','')
@@ -77,9 +82,9 @@ dairy_biogas2 = smf.ols(formula='Biogas_gen_ft3_day ~ Dairy', data=dairy_biogas)
 sns.regplot('Dairy', 'Biogas_gen_ft3_day', data=dairy_biogas, ci =95)
 ```
 
-![Branching](All dairy regression.png)
+![Branching](All_dairy_regression.png)
 
-![Branching](OLS all dairy regression results.png)
+![Branching](OLS_all_dairy_regression_results.png)
 
 ```js
 sns.regplot('Dairy', 'Biogas_gen_ft3_day', data=dairy_biogas, ci = 95)
@@ -93,7 +98,7 @@ plt.scatter(dairy_biogas['Dairy'], Y_lower_dairy_biogas, color = 'red')
 
 plt.show
 ```
-![Branching](95% CI all dairy.png)
+![Branching](95%_CI_all_dairy.png)
 
 
 ```js
