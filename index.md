@@ -65,15 +65,83 @@ df = df.astype({'Dairy':'int'})
 df = df.astype({'Swine':'int'})
 ```
 
-> This is a blockquote following a header.
->
-> When something is important enough, you do it even if the odds are not in your favor.
+Next, I drop undesired rows of data. The data of interest depends on the specific analysis. Below I show code where I drop data if the animal is not a dairy cow, if there is codigestion involved, if the daily biogas produciton is not reported, and if the digester is not a plug flow digester type. 
 
-### Header 3
+For every analysis I drop data if there is codigestion  involved (mutliple feedstocks entering the digester). Typically, codigestion means there is an agricultural residue (corn stover, wheat stalks, brewers grains, etc) added along with manure to the digester. My maximum biogas per animal values, which are used to calculate digester efficiency, are based on a manure-only operating digester.
 
-Text can be **bold**, _italic_, or ~~strikethrough~~.
+I also add a new column called "Biogas_ft3/cow", which is the daily biogas production per cow. Histograms featuring their distributions are shown below.
 
-[Link to another page](./another-page.html).
+```js
+df3.drop(df3[(df3['Animal'] != 'Dairy')].index, inplace = True)
+df3.drop(df3[(df3['Codigestion'] != 0)].index, inplace = True)
+df3.drop(df3[(df3['Biogas_gen_ft3_day'] == 0)].index, inplace = True)
+df3['Biogas_ft3/cow'] = df3['Biogas_gen_ft3_day'] / df3['Dairy']
+
+#df3.drop(df3[(df3['Biogas_End_Use'] == 0)].index, inplace = True)
+
+#selecting for 'Vertical Plug Flow', 'Horizontal Plug Flow', and 'Plug Flow - Unspecified', 'Modular Plug Flow', 'Mixed Plug FLow'
+
+notwant = ['Covered Lagoon', 'Unknown or Unspecified',
+       'Complete Mix', 0,
+       'Fixed Film/Attached Media',
+       'Primary digester tank with secondary covered lagoon',
+       'Induced Blanket Reactor', 'Anaerobic Sequencing Batch Reactor', 'Complete Mix Mini Digester', 'Dry Digester', 
+       'Microdigester']
+
+df3 = df3[~df3['Digester Type'].isin(notwant)]
+```
+
+Dairy- all digester types
+
+![Octocat](histo.png)
+
+Dairy- Plug flow
+
+![Octocat](Plug_histo.png)
+
+Dairy- Complete mix
+
+![Octocat](CM_histo.png)
+
+Dairy- Impermeable cover
+
+![Octocat](IC_histo.png)
+
+Dairy- Plug flow and complete mix (heated anaerobic digesters)
+
+![Octocat](CM_and_Plug_histo.png)
+
+I also built linear regression models for different types of digesters of dairy manure.
+
+```js
+sns.regplot('Dairy', 'Biogas_gen_ft3_day', data=dairy_biogas, ci =95)
+```
+
+Dairy- All digester types
+
+![Branching](All_dairy_regression.png)
+
+Dairy- Plug flow
+
+![Branching](Plug_r.png)
+
+Dairy- Complete mix
+
+![Branching](Complete_r.png)
+
+Dairy- Impermeable cover (Covered lagoon)
+
+![Branching](Cover_r.png)
+
+I solve for the regression coefficients using statsmodels.formula.api (imported as smf) ordinary least squares (OLS) method. The OLS report also features regression coefficients for 2.5 and 97.5 data percentiles, which allows me to code lines for upper and lower limits of a 95% confidence interval
+```js
+dairy_biogas2 = smf.ols(formula='Biogas_gen_ft3_day ~ Dairy', data=dairy_biogas).fit()
+```
+Dairy- All digester types
+
+![Branching](OLS_all_dairy_regression_results.png)
+
+![Branching](95%_CI_all_dairy.png)
 
 
 ```js
@@ -102,25 +170,6 @@ def hist_filter_ci_68(data):
     filtered_hist_data = data[(data['Biogas_ft3/cow'] >= Y_lower) & (data['Biogas_ft3/cow'] <= Y_upper)]
     return filtered_hist_data
 ```
-Dairy- all digester types
-
-![Octocat](histo.png)
-
-Dairy- Plug flow
-
-![Octocat](Plug_histo.png)
-
-Dairy- Complete mix
-
-![Octocat](CM_histo.png)
-
-Dairy- Impermeable cover
-
-![Octocat](IC_histo.png)
-
-Dairy- Plug flow and complete mix (heated anaerobic digesters)
-
-![Octocat](CM_and_Plug_histo.png)
 
 
 | Digester Type      | Efficiency (95% CI)|Efficiency (68% CI) |
@@ -161,33 +210,6 @@ def filter_confidence_interval(data):
     Y_lower = data['Dairy']*62.318-.000542
     filtered_data = data[(data['Biogas_gen_ft3_day'] >= Y_lower) & (data['Biogas_gen_ft3_day'] <= Y_upper)]
     return filtered_data
-```
-
-```js
-df3.drop(df3[(df3['Animal'] != 'Dairy')].index, inplace = True)
-df3.drop(df3[(df3['Codigestion'] != 0)].index, inplace = True)
-df3.drop(df3[(df3['Biogas_gen_ft3_day'] == 0)].index, inplace = True)
-df3['Biogas_ft3/cow'] = df3['Biogas_gen_ft3_day'] / df3['Dairy']
-
-#df3.drop(df3[(df3['Biogas_End_Use'] == 0)].index, inplace = True)
-
-#selecting for 'Vertical Plug Flow', 'Horizontal Plug Flow', and 'Plug Flow - Unspecified', 'Modular Plug Flow', 'Mixed Plug FLow'
-
-notwant = ['Covered Lagoon', 'Unknown or Unspecified',
-       'Complete Mix', 0,
-       'Fixed Film/Attached Media',
-       'Primary digester tank with secondary covered lagoon',
-       'Induced Blanket Reactor', 'Anaerobic Sequencing Batch Reactor', 'Complete Mix Mini Digester', 'Dry Digester', 
-       'Microdigester']
-
-df3 = df3[~df3['Digester Type'].isin(notwant)]
-```
-
-```ruby
-# Ruby code with syntax highlighting
-GitHubPages::Dependencies.gems.each do |gem, version|
-  s.add_dependency(gem, "= #{version}")
-end
 ```
 
 ```js
