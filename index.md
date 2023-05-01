@@ -24,9 +24,16 @@ This is a normal paragraph following a header. GitHub is a code hosting platform
 
 ```js
 // Javascript code with syntax highlighting.
-var fun = function lang(l) {
-  dateformat.i18n = require('./lang/' + l)
-  return true;
+sns.regplot('Dairy', 'Biogas_gen_ft3_day', data=dairy_biogas, ci = 95)
+
+Y_upper_dairy_biogas = dairy_biogas['Dairy']*91.174+.000614
+Y_lower_dairy_biogas = dairy_biogas['Dairy']*62.318-.000542
+
+plt.scatter(dairy_biogas['Dairy'], dairy_biogas['Biogas_gen_ft3_day'])
+plt.scatter(dairy_biogas['Dairy'], Y_upper_dairy_biogas, color = 'red')
+plt.scatter(dairy_biogas['Dairy'], Y_lower_dairy_biogas, color = 'red')
+
+plt.show
 }
 ```
 
@@ -94,7 +101,7 @@ end
 
 ### Small image
 
-![Octocat](https://github.githubassets.com/images/icons/emoji/octocat.png)
+![Octocat](histo.png)
 
 ### Large image
 
