@@ -41,14 +41,9 @@ I calculate the efficiency at which each digester type generates biogas using th
 
 I predict biogas production using Naive Bayes and Random Forest machine learning.
 
-I also relate covered lagoon digester biogas production to location... and show there's little correlation.
 
 ## Quick Note: Digester "Efficiency"
-A digestion process with maximum, or 100% digestion efficiency, can be approximately related to the biochemical methane potential (BMP) of a particular substrate. The BMP of dairy and swine manure is published in downloadable calculators from the California Air Resouces Board. 
-
-![Octocat](LOP.png)
-
-Manure production can be found in ASAE D384.2 MAR2005 Manure Production and Characteristics. Using these two resources, and assuming a 60% CH4 content in biogas, I calculated a maximum daily biogas production of 101.3 ft3/day for a dairy cow and 8.9 ft3/day for a swine. To calculated digester efficiency values, the daily biogas production per animal values will be compared to the aforementioned maximum daily biogas productions.
+A digestion process with maximum, or 100% digestion efficiency, can be approximately related to the biochemical methane potential (BMP) of a particular substrate. The BMP of dairy and swine manure is published in downloadable calculators (Compliance Offset Protocol Livestock Projects) from the California Air Resouces Board. Manure production can be found in ASAE D384.2 MAR2005 Manure Production and Characteristics. Using these two resources, and assuming a 60% CH4 content in biogas, I calculated a maximum daily biogas production of 101.3 ft3/day for a dairy cow and 8.9 ft3/day for a swine. To calculate digester efficiency values, the daily biogas production per animal values will be compared to the aforementioned maximum daily biogas productions.
 
 
 ## EPA AgSTAR Database and Data Wrangling
