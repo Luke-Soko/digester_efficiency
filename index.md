@@ -17,7 +17,7 @@ Across the US, there are ~2,000,000 farms, but only ~330 operating manure-based 
 Nonetheless, recently, thanks to Low Carbon Fuel Standard (LCFS) and Renewable Idenfitication Number (RIN) carbon credits, anaerobic digestion can be profitable in specific scenarios. My research models anaerobic digestion profitability. My goal is to publish profitable scenarios for anaerobic digester use to stimulate anaerobic digester implementation and reduce agricultural greenhouse gas emissions.
 
 ## Research Questions
-There are many different types of anaerobic digesters. One important step for my research is to identify which type of digester is best for a specific scenario. Over 95% of operating anaerobic digesters are either plug flow, complete mix, or covered lagoon digester types. Therefore, these digester 3 digester types will be analyzed. 
+There are many different types of anaerobic digesters. One important step for my research is to identify which type of digester is best for which scenario. Over 95% of operating anaerobic digesters are either plug flow, complete mix, or covered lagoon digester types. Therefore, these three digester types are analyzed. 
 
 Plug flow anaerobic digester without its top cover and without feedstock. Feedstock is typically heated, not mixed, and serpentines through vessel over many days.
 
@@ -27,7 +27,7 @@ Cross-section of a complete mix digester vessel. Feedstock is heated and mixed i
 
 ![Octocat](Complete_mix.png)
 
-Operating covered lagoon digester. Feedstock is not heated or mixed and stays in lagoon typically for many weeks or months.
+Operating covered lagoon digester. Feedstock is not heated or mixed and typically stays in lagoon for many weeks or months.
 
 ![Octocat](Covered_lagoon.png)
 
@@ -39,7 +39,36 @@ My second question is- given a number of livestock and digester type, what is th
 I calculate the efficiency at which each digester type generates biogas using the EPA Agstar Digester Database
 ![Octocat](EPA.png)
 
-## Header 2
+I predict biogas production using Naive Bayes and Random Forest machine learning.
+
+I also relate covered lagoon digester biogas production to location... and show there's little correlation.
+
+## Quick Note: Digester "Efficiency"
+A digestion process with maximum, or 100% digestion efficiency, can be approximately related to the biochemical methane potential (BMP) of a particular substrate. The BMP of dairy and swine manure is published in downloadable calculators from the California Air Resouces Board. 
+
+![Octocat](LOP.png)
+
+Manure production can be found in ASAE D384.2 MAR2005 Manure Production and Characteristics. Using these two resources, and assuming a 60% CH4 content in biogas, I calculated a maximum daily biogas production of 101.3 ft3/day for a dairy cow and 8.9 ft3/day for a swine. To calculated digester efficiency values, the daily biogas production per animal values will be compared to the aforementioned maximum daily biogas productions.
+
+
+## EPA AgSTAR Database and Data Wrangling
+
+After uploading the AgSTAR Anaerobic Digestion Database to python, the database should look similar to picture below.
+
+![Octocat](screenshot_datatable.png)
+
+To work with the data in Python, I had to remove commas within the data and reassign some string values as integer values.
+```js
+df[' Biogas Generation Estimate (cu_ft/day) ']=df[' Biogas Generation Estimate (cu_ft/day) '].str.replace(',','')
+df[' Electricity Generated (kWh/yr) ']=df[' Electricity Generated (kWh/yr) '].str.replace(',','')
+df['Dairy']=df['Dairy'].str.replace(',','')
+df['Swine']=df['Swine'].str.replace(',','')
+df.fillna(0,inplace=True)
+df = df.astype({' Biogas Generation Estimate (cu_ft/day) ':'int'})
+df = df.astype({' Electricity Generated (kWh/yr) ': 'int'})
+df = df.astype({'Dairy':'int'})
+df = df.astype({'Swine':'int'})
+```
 
 > This is a blockquote following a header.
 >
@@ -106,17 +135,6 @@ Dairy- Plug flow and complete mix (heated anaerobic digesters)
 | Complete mix       | 85.9%              | 82.7%              |
 | Impermeable Cover  | 43.1%              | 41.1%              |
 
-```js
-df[' Biogas Generation Estimate (cu_ft/day) ']=df[' Biogas Generation Estimate (cu_ft/day) '].str.replace(',','')
-df[' Electricity Generated (kWh/yr) ']=df[' Electricity Generated (kWh/yr) '].str.replace(',','')
-df['Dairy']=df['Dairy'].str.replace(',','')
-df['Swine']=df['Swine'].str.replace(',','')
-df.fillna(0,inplace=True)
-df = df.astype({' Biogas Generation Estimate (cu_ft/day) ':'int'})
-df = df.astype({' Electricity Generated (kWh/yr) ': 'int'})
-df = df.astype({'Dairy':'int'})
-df = df.astype({'Swine':'int'})
-```
 
 ```js
 dairy_biogas2 = smf.ols(formula='Biogas_gen_ft3_day ~ Dairy', data=dairy_biogas).fit()
