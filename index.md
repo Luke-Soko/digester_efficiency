@@ -20,12 +20,15 @@ Nonetheless, recently, thanks to Low Carbon Fuel Standard (LCFS) and Renewable I
 There are many different types of anaerobic digesters. One important step for my research is to identify which type of digester is best for a specific scenario. Over 95% of operating anaerobic digesters are either plug flow, complete mix, or covered lagoon digester types. Therefore, these digester 3 digester types will be analyzed. 
 
 Plug flow anaerobic digester without its top cover and without feedstock. Feedstock is typically heated, not mixed, and serpentines through vessel over many days.
+
 ![Octocat](Plug_flow.png)
 
 Cross-section of a complete mix digester vessel. Feedstock is heated and mixed in vessel over many days.
+
 ![Octocat](Complete_mix.png)
 
 Operating covered lagoon digester. Feedstock is not heated or mixed and stays in lagoon typically for many weeks or months.
+
 ![Octocat](Covered_lagoon.png)
 
 The capital cost varies among these three digester types, though their biogas production varies as well. 
