@@ -1,10 +1,23 @@
-Text can be **bold**, _italic_, or ~~strikethrough~~.
-
-[Link to another page](./another-page.html).
-
 # ABE 516X Final Project- Anaerobic Digestion Efficiency
 
-Hi, welcome to my (Luke Soko) final project for ABE 516X. There are ~2,000,000 farms across the US, but only ~330 operating manure-based anaerobic digesters. Why? They're historically unprofitable (until recently for specific scenarios). My research models anaerobic digestion profitability. My goal is to publish profitable scenarios for anaerobic digester use to stimulate anaerobic digester implementation and reduce agricultural greenhouse gas emissions.
+Hi, welcome to my (Luke Soko) final project for ABE 516X. 
+
+In 2021, the United States emitted 6.34 billion tonnes of CO2e, which is approximately the weight of 11 billion cows... in gas.
+Simultaneously, natural gas consumption continues to rise.
+
+![Octocat](ng.png)
+
+The reality is, right now, we need natural gas. It's highly likely your home or apartment has furnaces, water heaters, and ovens powered by natural gas. Nearby factories likely have natural-gas-powered boilers which generate steam to operate heat exchangers and stripping columns. The United States currently has a strong dependency on natural gas and operates using roughly 3,000,000 miles of natural gas pipelines, which is enough pipelines to wrap around the entire planet 120 times.
+
+Anaerobic digestion can help mitigate both issues. Anaerobic digestion uses microorganisms to break down organic matter (in an environment without oxygen) to produce biogas, which is roughly 60% methane (CH4). CH4 is the primary component of natural gas. For this reason, I use CH4 and natural gas interchangably. Biogas from an anerobic digester can enter an upgrader (membrane filter or other technology) which can purify the biogas to >95% CH4, which can be injected into natural gas pipelines as renewable natural gas. Equally as important, the renewable natural gas is also biogenic natural gas. Biogenic natural gas implies that the carbon in the natural gas was initially derived from the atmosphere, instead of being pulled from carbon storage thousands of feet below the Earth's surface (fossil natural gas). Biogenic natural gas inherently has less overall global warming potenital than fossil natural gas.
+
+There are ~2,000,000 farms across the US, but only ~330 operating manure-based anaerobic digesters. Why? 
+
+They're historically unprofitable. Nonetheless, recently, thanks to Low Carbon Fuel Standard (LCFS) and Renewable Idenfitication (RIN) carbon credits, anaerobic digestion can be profitable in specific scenarios. My research models anaerobic digestion profitability. My goal is to publish profitable scenarios for anaerobic digester use to stimulate anaerobic digester implementation and reduce agricultural greenhouse gas emissions.
+
+
+
+![Octocat](EPA.png)
 
 ## Header 2
 
@@ -64,6 +77,14 @@ Dairy- Impermeable cover
 Dairy- Plug flow and complete mix (heated anaerobic digesters)
 
 ![Octocat](CM_and_Plug_histo.png)
+
+
+| Digester Type      | Efficiency (95% CI)|Efficiency (68% CI) |
+|:-------------------|:-------------------|:-------------------|
+| All digester types | 68.8%              | 65.8%              |
+| Plug flow          | 73.7%              | 71.3%              |
+| Complete mix       | 85.9%              | 82.7%              |
+| Impermeable Cover  | 43.1%              | 41.1%              |
 
 ```js
 df[' Biogas Generation Estimate (cu_ft/day) ']=df[' Biogas Generation Estimate (cu_ft/day) '].str.replace(',','')
