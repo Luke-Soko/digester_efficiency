@@ -13,7 +13,7 @@ Anaerobic digestion can help mitigate both issues. Anaerobic digestion uses micr
 
 There are ~2,000,000 farms across the US, but only ~330 operating manure-based anaerobic digesters. Why? 
 
-They're historically unprofitable. Nonetheless, recently, thanks to Low Carbon Fuel Standard (LCFS) and Renewable Idenfitication (RIN) carbon credits, anaerobic digestion can be profitable in specific scenarios. My research models anaerobic digestion profitability. My goal is to publish profitable scenarios for anaerobic digester use to stimulate anaerobic digester implementation and reduce agricultural greenhouse gas emissions.
+They're historically unprofitable. Nonetheless, recently, thanks to Low Carbon Fuel Standard (LCFS) and Renewable Idenfitication Number (RIN) carbon credits, anaerobic digestion can be profitable in specific scenarios. My research models anaerobic digestion profitability. My goal is to publish profitable scenarios for anaerobic digester use to stimulate anaerobic digester implementation and reduce agricultural greenhouse gas emissions.
 
 
 
