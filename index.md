@@ -1,7 +1,3 @@
----
-layout: default
----
-
 Text can be **bold**, _italic_, or ~~strikethrough~~.
 
 [Link to another page](./another-page.html).
@@ -23,7 +19,45 @@ This is a normal paragraph following a header. GitHub is a code hosting platform
 ### Header 3
 
 ```js
-// Javascript code with syntax highlighting.
+def efficiency(data_dairy):
+    eff_calc = (data_dairy/101.336)*100
+    return  eff_calc
+```
+
+
+```js
+#95% confidence interval filter for data - 2 standard deviations
+
+def hist_filter_ci(data):
+    Y_upper = np.percentile(data['Biogas_ft3/cow'], 97.5)
+    Y_lower = np.percentile(data['Biogas_ft3/cow'], 2.5)
+    filtered_hist_data = data[(data['Biogas_ft3/cow'] >= Y_lower) & (data['Biogas_ft3/cow'] <= Y_upper)]
+    return filtered_hist_data
+```
+
+```js
+#68% confidence interval filter for data- 1 standard deviation
+
+def hist_filter_ci_68(data):
+    Y_upper = np.percentile(data['Biogas_ft3/cow'], 84)
+    Y_lower = np.percentile(data['Biogas_ft3/cow'], 16)
+    filtered_hist_data = data[(data['Biogas_ft3/cow'] >= Y_lower) & (data['Biogas_ft3/cow'] <= Y_upper)]
+    return filtered_hist_data
+```
+
+```js
+df[' Biogas Generation Estimate (cu_ft/day) ']=df[' Biogas Generation Estimate (cu_ft/day) '].str.replace(',','')
+df[' Electricity Generated (kWh/yr) ']=df[' Electricity Generated (kWh/yr) '].str.replace(',','')
+df['Dairy']=df['Dairy'].str.replace(',','')
+df['Swine']=df['Swine'].str.replace(',','')
+df.fillna(0,inplace=True)
+df = df.astype({' Biogas Generation Estimate (cu_ft/day) ':'int'})
+df = df.astype({' Electricity Generated (kWh/yr) ': 'int'})
+df = df.astype({'Dairy':'int'})
+df = df.astype({'Swine':'int'})
+```
+
+```js
 sns.regplot('Dairy', 'Biogas_gen_ft3_day', data=dairy_biogas, ci = 95)
 
 Y_upper_dairy_biogas = dairy_biogas['Dairy']*91.174+.000614
@@ -34,7 +68,34 @@ plt.scatter(dairy_biogas['Dairy'], Y_upper_dairy_biogas, color = 'red')
 plt.scatter(dairy_biogas['Dairy'], Y_lower_dairy_biogas, color = 'red')
 
 plt.show
-}
+```
+
+```js
+def filter_confidence_interval(data):
+    Y_upper = data['Dairy']*91.174+.000614
+    Y_lower = data['Dairy']*62.318-.000542
+    filtered_data = data[(data['Biogas_gen_ft3_day'] >= Y_lower) & (data['Biogas_gen_ft3_day'] <= Y_upper)]
+    return filtered_data
+```
+
+```js
+df3.drop(df3[(df3['Animal'] != 'Dairy')].index, inplace = True)
+df3.drop(df3[(df3['Codigestion'] != 0)].index, inplace = True)
+df3.drop(df3[(df3['Biogas_gen_ft3_day'] == 0)].index, inplace = True)
+df3['Biogas_ft3/cow'] = df3['Biogas_gen_ft3_day'] / df3['Dairy']
+
+#df3.drop(df3[(df3['Biogas_End_Use'] == 0)].index, inplace = True)
+
+#selecting for 'Vertical Plug Flow', 'Horizontal Plug Flow', and 'Plug Flow - Unspecified', 'Modular Plug Flow', 'Mixed Plug FLow'
+
+notwant = ['Covered Lagoon', 'Unknown or Unspecified',
+       'Complete Mix', 0,
+       'Fixed Film/Attached Media',
+       'Primary digester tank with secondary covered lagoon',
+       'Induced Blanket Reactor', 'Anaerobic Sequencing Batch Reactor', 'Complete Mix Mini Digester', 'Dry Digester', 
+       'Microdigester']
+
+df3 = df3[~df3['Digester Type'].isin(notwant)]
 ```
 
 ```ruby
@@ -43,6 +104,78 @@ GitHubPages::Dependencies.gems.each do |gem, version|
   s.add_dependency(gem, "= #{version}")
 end
 ```
+
+```js
+df.bayes["Digester Type"].replace('Covered Lagoon',1, inplace = True)
+df.bayes["Digester Type"].replace('Mixed Plug Flow',2, inplace =True)
+df.bayes["Digester Type"].replace('Horizontal Plug Flow',2, inplace = True)
+df.bayes["Digester Type"].replace('Vertical Plug Flow',2, inplace = True)
+df.bayes["Digester Type"].replace('Plug Flow - Unspecified',2,inplace = True)
+df.bayes["Digester Type"].replace('Complete Mix',3,inplace = True)
+```
+
+```js
+df.bayes['biogas/dairy'] = df.bayes['Biogas_gen_ft3_day']/df.bayes['Dairy']
+
+def pred_filter(data):
+    Y_upper = np.percentile(data['biogas/dairy'], 97.5)
+    Y_lower = np.percentile(data['biogas/dairy'], 2.5)
+    filtered_hist_data = data[(data['biogas/dairy'] >= Y_lower) & (data['biogas/dairy'] <= Y_upper)]
+    return filtered_hist_data
+    
+df_bayes_clean = pred_filter(df.bayes).drop(columns=['biogas/dairy'])
+```
+
+```js
+X1 = df_bayes_clean.drop(["Biogas_gen_ft3_day"], axis = 1)
+Y1 = df_bayes_clean["Biogas_gen_ft3_day"]
+
+x_train1, x_test1, y_train1, y_test1 = train_test_split(X1, Y1, random_state = 1)
+
+x_train1 = np.array(x_train1)
+y_train1 = np.array(y_train1).squeeze()
+
+nb.fit(x_train1, y_train1)
+
+y_predicted = nb.predict(x_test1)
+accuracy_score(y_test1, y_predicted)
+
+def biogas_pred_nb(digester_type,dairy):
+    biogas = nb.predict([[digester_type,dairy]])
+    dairy_eff = nb.predict([[digester_type,dairy]])/dairy/101.336
+    return biogas, dairy_eff
+    
+biogas_pred_nb(1,5000)
+biogas_pred_nb(2,5000)
+biogas_pred_nb(3,5000)
+```
+
+
+```js
+df_forest_clean = df_bayes_clean
+X = df_forest_clean.drop(["Biogas_gen_ft3_day"], axis = 1)
+y = df_forest_clean["Biogas_gen_ft3_day"]
+
+from sklearn.model_selection import train_test_split
+import sklearn.ensemble as ske
+
+X_train, X_test, Y_train, Y_test = train_test_split(X, y, test_size = 0.25, random_state = 0)
+
+reg = ske.RandomForestRegressor(n_estimators = 1000, random_state = 0)
+Y_train = np.ravel(Y_train)
+reg.fit(X_train, Y_train)
+Y_pred = reg.predict(X_test)
+
+def biogas_pred_rf(digester_type,dairy):
+    biogas = reg.predict([[digester_type,dairy]])
+    dairy_eff = reg.predict([[digester_type,dairy]])/dairy/101.336
+    return biogas, dairy_eff
+
+biogas_pred_rf(1,5000)
+biogas_pred_rf(2,5000)
+biogas_pred_rf(3,5000)
+```
+
 
 #### Header 4
 
