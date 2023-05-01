@@ -1,5 +1,6 @@
 # ABE 516X Final Project- Anaerobic Digestion Efficiency
 
+## Project Introduction
 Hi, welcome to my (Luke Soko) final project for ABE 516X. 
 
 In 2021, the United States emitted 6.34 billion tonnes of CO2e, which is approximately the weight of 11 billion cows... in gas.
@@ -7,16 +8,32 @@ Simultaneously, natural gas consumption continues to rise.
 
 ![Octocat](ng.png)
 
-The reality is, right now, we need natural gas. It's highly likely your home or apartment has furnaces, water heaters, and ovens powered by natural gas. Nearby factories likely have natural-gas-powered boilers which generate steam to operate heat exchangers and stripping columns. The United States currently has a strong dependency on natural gas and operates using roughly 3,000,000 miles of natural gas pipelines, which is enough pipelines to wrap around the entire planet 120 times.
+The reality is, right now, we need natural gas. It's highly likely your home or apartment has furnaces, water heaters, and ovens powered by natural gas. Nearby factories likely have natural-gas-powered boilers which generate steam to operate heat exchangers and stripping columns. The United States currently has a strong dependency on natural gas and operates using roughly 3,000,000 miles of natural gas pipelines, which is enough pipeline to wrap around the entire planet 120 times.
 
 Anaerobic digestion can help mitigate both issues. Anaerobic digestion uses microorganisms to break down organic matter (in an environment without oxygen) to produce biogas, which is roughly 60% methane (CH4). CH4 is the primary component of natural gas. For this reason, I use CH4 and natural gas interchangably. Biogas from an anerobic digester can enter an upgrader (membrane filter or other technology) which can purify the biogas to >95% CH4, which can be injected into natural gas pipelines as renewable natural gas. Equally as important, the renewable natural gas is also biogenic natural gas. Biogenic natural gas implies that the carbon in the natural gas was initially derived from the atmosphere, instead of being pulled from carbon storage thousands of feet below the Earth's surface (fossil natural gas). Biogenic natural gas inherently has less overall global warming potenital than fossil natural gas.
 
-There are ~2,000,000 farms across the US, but only ~330 operating manure-based anaerobic digesters. Why? 
+Across the US, there are ~2,000,000 farms, but only ~330 operating manure-based anaerobic digesters. Why? They're historically unprofitable. 
 
-They're historically unprofitable. Nonetheless, recently, thanks to Low Carbon Fuel Standard (LCFS) and Renewable Idenfitication Number (RIN) carbon credits, anaerobic digestion can be profitable in specific scenarios. My research models anaerobic digestion profitability. My goal is to publish profitable scenarios for anaerobic digester use to stimulate anaerobic digester implementation and reduce agricultural greenhouse gas emissions.
+Nonetheless, recently, thanks to Low Carbon Fuel Standard (LCFS) and Renewable Idenfitication Number (RIN) carbon credits, anaerobic digestion can be profitable in specific scenarios. My research models anaerobic digestion profitability. My goal is to publish profitable scenarios for anaerobic digester use to stimulate anaerobic digester implementation and reduce agricultural greenhouse gas emissions.
+
+## Research Questions
+There are many different types of anaerobic digesters. One important step for my research is to identify which type of digester is best for a specific scenario. Over 95% of operating anaerobic digesters are either plug flow, complete mix, or covered lagoon digester types. Therefore, these digester 3 digester types will be analyzed. 
+
+Plug flow anaerobic digester without its top cover and without feedstock. Feedstock is typically heated, not mixed, and serpentines through vessel over many days.
+![Octocat](Plug_flow.png)
+
+Cross-section of a complete mix digester vessel. Feedstock is heated and mixed in vessel over many days.
+![Octocat](Complete_mix.png)
+
+Operating covered lagoon digester. Feedstock is not heated or mixed and stays in lagoon typically for many weeks or months.
+![Octocat](Covered_lagoon.png)
+
+The capital cost varies among these three digester types, though their biogas production varies as well. 
+My first question is- what is the digestion efficiency of each type of digester? 
+My second question is- given a number of livestock and digester type, what is the daily biogas production?
 
 
-
+I calculate the efficiency at which each digester type generates biogas using the EPA Agstar Digester Database
 ![Octocat](EPA.png)
 
 ## Header 2
