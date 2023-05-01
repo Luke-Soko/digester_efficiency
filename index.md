@@ -57,7 +57,7 @@ def efficiency(data_dairy):
     eff_calc = (data_dairy/101.336)*100
     return  eff_calc
 ```
-
+1
 
 ```js
 #95% confidence interval filter for data - 2 standard deviations
