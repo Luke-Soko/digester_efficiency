@@ -146,7 +146,9 @@ def efficiency(data_dairy):
     
 efficiency(ci95_df5['Biogas_ft3/cow'].mean())
 ```
+
 Table 1: Dairy anaerobic digester efficiencies
+
 | Digester Type      | Efficiency (95% CI)|Efficiency (68% CI) |
 |:-------------------|:-------------------|:-------------------|
 | All digester types | 68.8%              | 65.8%              |
@@ -332,6 +334,7 @@ biogas_pred_rf(3,5000)
 
 
 Table 2: Daily biogas predictions (ft3 biogas/day) and digester efficiency percentages for an anaerobic digester operation digesting manure from 5000 dairy cows
+
 | Digester Type      | Naive Bayes Biogas |Random Forest Biogas|Naive Bayes Digester Efficiency|Random Forest Digester Efficiency|
 |:-------------------|:-------------------|:-------------------|:------------------------------|---------------------------------|
 | Plug flow          | 1,200,000          | 352,651            | 236.8%                        | 69.6%                           |
