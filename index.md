@@ -114,7 +114,9 @@ Dairy- Plug flow and complete mix (heated anaerobic digesters)
 
 ![Octocat](CM_and_Plug_histo.png)
 
-Some of the "Biogas_ft3/cow" histograms feature clear outliers and right skew distributions. I built functions to filter out outliers to help solve for a more accuate mean daily biogas production per cow. The "95% confidence interval filter for data - 2 standard deviations", removes any data above the 97.5 percentile of the distribution and below the 2.5 percentile of the distribution. Therefore, that function removes all data outside of two standard deviations of the mean. The "68% confidence interval filer for data - 1 standard deviation" removes any data above the 84 percentile of the distribution and below the 16 percentile of the distribution. Therefore, that function removes all data outside of one standard deviations of the mean. 
+The daily biogas generation is a number that is reported to the EPA by the farm; it is not a calculated number. Digester owners could misreport their daily biogas production, thereby skewing the distribution of this dataset. The histograms of the digester daily biogas per animal distributions are almost all right skewed (a few over-optimistic owners) and contain clear outliers. 
+
+I built functions to filter out outliers to help solve for a more accuate mean daily biogas production per cow. The "95% confidence interval filter for data - 2 standard deviations", removes any data above the 97.5 percentile of the distribution and below the 2.5 percentile of the distribution. Therefore, that function removes all data outside of two standard deviations of the mean. The "68% confidence interval filer for data - 1 standard deviation" removes any data above the 84 percentile of the distribution and below the 16 percentile of the distribution. Therefore, that function removes all data outside of one standard deviations of the mean. 
 
 ```js
 #95% confidence interval filter for data - 2 standard deviations
@@ -333,4 +335,19 @@ The table below features daily biogas predictions (ft3 biogas/day) and digester 
 | Plug flow          | 1,200,000          | 352,651            | 236.8%                        | 69.6%                           |
 | Complete mix       | 432,000            | 325,077            | 85.3%                         | 64.2%                           |
 | Impermeable Cover  | 1,200,000          | 270,735            | 236.8%                        | 53.4%                           |
+
+The random forest efficiency prediction are significantly closer to the efficiency values calculated using the histograms and one and two standard deviation filters.
+
+## ABE 516X Discussion 
+This website incorporates basic data wrangling (deleting rows and adding rows from a dataframe based on parameters), functions (filters for values outside of standard deviations and efficiency function), histograms, linear regression, OLS report and plotted confidence intervals, Naive Bayes machines learning, and Random Forest machine learning. All methods were learned while taking the course. The most important part of this analysis was calculating digester efficiencies and figuring out that Random Forest is a significantly better machine learning mechanism for continuous regression application compared to Naive Bayes. The Random Forest model does not predict biogas production values as accurately as I'd hoped so far, although with more data, potentially from European countries, the Random Forest model will grow stronger and more accurate (more accurate defined by a lesser root mean squared error). Currently, the Naive Bayes and Random Forest models operate using 2 columnds and 107 rows of inputted data. Larger amounts of data generally increase the accuracy of machine learning models.
+
+The daily biogas per animal histogram data is filtered using functions that omit data outside one or two standard deviations from the mean. Standard deviation and percentile-based filtering mechanisms are most effectively applied to true normally distributed data. I showed that most of data featured right skew distributions, or not true normal distributions. Therefore, I knowingly applied a filtering technique to omit high daily biogas per animal data. I assumed that high daily biogas per animal values were a result of misreporting, misinterpretation, or incorrect sensor outputs. Nonetheless, I could be wrong. Some high daily biogas per animal values could be accurate, and omitting parts of the data could reduce the accuracy of this analysis. I also assume that the BMP values reported by the California Air Resources Board are correct. Any change in BMP value results in a change in the 100% efficiency of digestion benchmark, which would alter all digester type efficiency values.
+
+This data analysis is completely reproducible and accessable to all of the general public who have access to an internet browser, Excel, and Python. The digester database can be found via a Google search "EPA AgSTAR anaerobic digester database". Then, the database can be uploaded to Python. Next, a user could follow along with this website, sample code from the website, and regenerate the graphs and table values shown in this website. NOTE: Before uploading the digester database Excel spreadsheet to Python, I deleted 3 cells of data containing the value "-" within the column "Electricity Generated (kWh/yr). Data wrangling for this very particular flaw in the dataframe seemed significantly more tedious in Python, so I completed this step in Excel.
+
+## Conclusion
+
+
+
+
 
