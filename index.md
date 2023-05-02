@@ -147,6 +147,8 @@ def efficiency(data_dairy):
 efficiency(ci95_df5['Biogas_ft3/cow'].mean())
 ```
 
+Table 1: Dairy anaerobic digester efficiencies
+
 | Digester Type      | Efficiency (95% CI)|Efficiency (68% CI) |
 |:-------------------|:-------------------|:-------------------|
 | All digester types | 68.8%              | 65.8%              |
