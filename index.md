@@ -4,6 +4,7 @@
 Hi, welcome to my (Luke Soko) final project for ABE 516X. 
 
 In 2021, the United States emitted 6.34 billion tonnes of CO2e, which is approximately the weight of 11 billion cows... in gas.
+
 Simultaneously, natural gas consumption continues to rise.
 
 ![Octocat](ng.png)
@@ -69,7 +70,7 @@ Next, I drop undesired rows of data. The data of interest depends on the specifi
 
 For every analysis I drop data if there is codigestion  involved (mutliple feedstocks entering the digester). Typically, codigestion means there is an agricultural residue (corn stover, wheat stalks, brewers grains, etc) added along with manure to the digester. My maximum biogas per animal values, which are used to calculate digester efficiency, are based on a manure-only operating digester.
 
-I also add a new column called "Biogas_ft3/cow", which is the daily biogas production per cow. Histograms featuring their distributions are shown below.
+I also add a new column called "Biogas_ft3/cow", which is the daily biogas production per cow.
 
 ```js
 df3.drop(df3[(df3['Animal'] != 'Dairy')].index, inplace = True)
@@ -90,6 +91,8 @@ notwant = ['Covered Lagoon', 'Unknown or Unspecified',
 
 df3 = df3[~df3['Digester Type'].isin(notwant)]
 ```
+## Efficiency Analysis
+Histograms featuring daily biogas production per cow or "Biogas ft3/cow" for different digester types are shown below.
 
 Dairy- all digester types
 
@@ -111,7 +114,46 @@ Dairy- Plug flow and complete mix (heated anaerobic digesters)
 
 ![Octocat](CM_and_Plug_histo.png)
 
-I also built linear regression models for different types of digesters of dairy manure.
+Some of the "Biogas_ft3/cow" histograms feature clear outliers and right skew distributions. I built functions to filter out outliers to help solve for a more accuate mean daily biogas production per cow. The "95% confidence interval filter for data - 2 standard deviations", removes any data above the 97.5 percentile of the distribution and below the 2.5 percentile of the distribution. Therefore, that function removes all data outside of two standard deviations of the mean. The "68% confidence interval filer for data - 1 standard deviation" removes any data above the 84 percentile of the distribution and below the 16 percentile of the distribution. Therefore, that function removes all data outside of one standard deviations of the mean. 
+
+```js
+#95% confidence interval filter for data - 2 standard deviations
+
+def hist_filter_ci(data):
+    Y_upper = np.percentile(data['Biogas_ft3/cow'], 97.5)
+    Y_lower = np.percentile(data['Biogas_ft3/cow'], 2.5)
+    filtered_hist_data = data[(data['Biogas_ft3/cow'] >= Y_lower) & (data['Biogas_ft3/cow'] <= Y_upper)]
+    return filtered_hist_data
+```
+
+```js
+#68% confidence interval filter for data- 1 standard deviation
+
+def hist_filter_ci_68(data):
+    Y_upper = np.percentile(data['Biogas_ft3/cow'], 84)
+    Y_lower = np.percentile(data['Biogas_ft3/cow'], 16)
+    filtered_hist_data = data[(data['Biogas_ft3/cow'] >= Y_lower) & (data['Biogas_ft3/cow'] <= Y_upper)]
+    return filtered_hist_data
+```
+After filtering the "Biogas_ft3/cow" data, thereby removing outliers for each digester type, I calculate the mean "Biogas_ft3/cow". The mean "Biogas_ft3/cow" is inputted into the function, "efficiency", to calculate the digester efficiency. An example is shown below, followed by a summary of dairy anaerobic digester efficiencies.
+
+```js
+def efficiency(data_dairy):
+    eff_calc = (data_dairy/101.336)*100
+    return  eff_calc
+    
+efficiency(ci95_df5['Biogas_ft3/cow'].mean())
+```
+| Digester Type      | Efficiency (95% CI)|Efficiency (68% CI) |
+|:-------------------|:-------------------|:-------------------|
+| All digester types | 68.8%              | 65.8%              |
+| Plug flow          | 73.7%              | 71.3%              |
+| Complete mix       | 85.9%              | 82.7%              |
+| Impermeable Cover  | 43.1%              | 41.1%              |
+
+
+## Regression Analysis
+I built linear regression models for different types of digesters of dairy manure to visualize the data. I also built 95% confidence intervals and added lines representing the upper and lower limits of the confidence interval into the regression models.
 
 ```js
 sns.regplot('Dairy', 'Biogas_gen_ft3_day', data=dairy_biogas, ci =95)
@@ -133,62 +175,13 @@ Dairy- Impermeable cover (Covered lagoon)
 
 ![Branching](Cover_r.png)
 
-I solve for the regression coefficients using statsmodels.formula.api (imported as smf) ordinary least squares (OLS) method. The OLS report also features regression coefficients for 2.5 and 97.5 data percentiles, which allows me to code lines for upper and lower limits of a 95% confidence interval
-```js
-dairy_biogas2 = smf.ols(formula='Biogas_gen_ft3_day ~ Dairy', data=dairy_biogas).fit()
-```
+I solve for the regression coefficients using statsmodels.formula.api (imported as smf) ordinary least squares (OLS) method. 
+
 Dairy- All digester types
 
 ![Branching](OLS_all_dairy_regression_results.png)
 
-![Branching](95%_CI_all_dairy.png)
-
-
-```js
-def efficiency(data_dairy):
-    eff_calc = (data_dairy/101.336)*100
-    return  eff_calc
-```
-1
-
-```js
-#95% confidence interval filter for data - 2 standard deviations
-
-def hist_filter_ci(data):
-    Y_upper = np.percentile(data['Biogas_ft3/cow'], 97.5)
-    Y_lower = np.percentile(data['Biogas_ft3/cow'], 2.5)
-    filtered_hist_data = data[(data['Biogas_ft3/cow'] >= Y_lower) & (data['Biogas_ft3/cow'] <= Y_upper)]
-    return filtered_hist_data
-```
-
-```js
-#68% confidence interval filter for data- 1 standard deviation
-
-def hist_filter_ci_68(data):
-    Y_upper = np.percentile(data['Biogas_ft3/cow'], 84)
-    Y_lower = np.percentile(data['Biogas_ft3/cow'], 16)
-    filtered_hist_data = data[(data['Biogas_ft3/cow'] >= Y_lower) & (data['Biogas_ft3/cow'] <= Y_upper)]
-    return filtered_hist_data
-```
-
-
-| Digester Type      | Efficiency (95% CI)|Efficiency (68% CI) |
-|:-------------------|:-------------------|:-------------------|
-| All digester types | 68.8%              | 65.8%              |
-| Plug flow          | 73.7%              | 71.3%              |
-| Complete mix       | 85.9%              | 82.7%              |
-| Impermeable Cover  | 43.1%              | 41.1%              |
-
-
-```js
-dairy_biogas2 = smf.ols(formula='Biogas_gen_ft3_day ~ Dairy', data=dairy_biogas).fit()
-sns.regplot('Dairy', 'Biogas_gen_ft3_day', data=dairy_biogas, ci =95)
-```
-
-![Branching](All_dairy_regression.png)
-
-![Branching](OLS_all_dairy_regression_results.png)
-
+The OLS report features regression coefficients for 2.5 and 97.5 data percentiles, which allows me to code lines for upper and lower limits of a 95% confidence interval as shown below.
 ```js
 sns.regplot('Dairy', 'Biogas_gen_ft3_day', data=dairy_biogas, ci = 95)
 
@@ -201,16 +194,55 @@ plt.scatter(dairy_biogas['Dairy'], Y_lower_dairy_biogas, color = 'red')
 
 plt.show
 ```
-![Branching](95%_CI_all_dairy.png)
 
+Dairy- all digester types
+
+![Octocat](95_CI_all_dairy.png)
+
+Dairy- Plug flow
+
+![Octocat](Plug_cir.png)
+
+Dairy- Complete mix
+
+![Octocat](Complete_cir.png)
+
+Dairy- Impermeable cover
+
+![Octocat](Cover_cir.png)
+
+## Covered Lagoon Digester Location Analysis
+
+Covered lagoon digesters (impermeable cover digesters) are not heated. Biogas production is heavily influenced by temperature. Typically, plug flow and complete mix digesters are heated to mesophilic temperature (37 degrees Celsius or 98.6 degrees Fahrenheit). One would imagine that covered lagoon digesters in southern states, featuring hotter average temperatures, would produce more biogas or more energy overall per animal. To test this hypothesis, I created the three graphs below. Based on visual of the graphs, and the overall lack of data, it does not seem as though we can conclude that southern states are associated with significantly greater energy production per animal when compared to northern states. 
+
+![Octocat](loc_dairy.png)
+
+![Octocat](swine_biogas.png)
+
+![Octocat](Swine_electro.png)
+
+
+## Machine Learning Analysis
+
+### Naive Bayes
+
+Naive Bayes machine learning is completed to predict the daily biogas production from an inputted number of dairy cows and an inputted digester type. Naive Bayes is a poor way to predict daily biogas production based on this data. Naive Bayes machine learns based on categories, not on a continuous regression spectrum. For any input, Naive Bayes will output a biogas production value that corresponds to a value in the training dataset. 
+
+Data wrangling
 
 ```js
-def filter_confidence_interval(data):
-    Y_upper = data['Dairy']*91.174+.000614
-    Y_lower = data['Dairy']*62.318-.000542
-    filtered_data = data[(data['Biogas_gen_ft3_day'] >= Y_lower) & (data['Biogas_gen_ft3_day'] <= Y_upper)]
-    return filtered_data
+df.bayes = df9[["Digester Type","Dairy","Biogas_gen_ft3_day"]].copy()
+
+#I want 'Covered Lagoon', 'Mixed Plug Flow','Complete Mix','Horizontal Plug Flow','Vertical Plug Flow','Plug Flow - Unspecified'
+
+notwant = ['Unknown or Unspecified', 0,'Fixed Film/Attached Media','Primary digester tank with secondary covered lagoon','Induced Blanket Reactor', 'Anaerobic Sequencing Batch Reactor', 'Complete Mix Mini Digester','Dry Digester', 'Modular Plug Flow','Microdigester']
+
+df.bayes = df.bayes[~df.bayes['Digester Type'].isin(notwant)]
+df.bayes.drop(df.bayes[(df.bayes['Biogas_gen_ft3_day'] == 0)].index, inplace = True)
+df.bayes.drop(df.bayes[(df.bayes['Dairy'] == 0)].index, inplace = True)
 ```
+
+To simplify the machine learning, I number coded the anaerobic digester types where 1 = covered lagoon, 2 = plug flow, and 3 = complete mix. 
 
 ```js
 df.bayes["Digester Type"].replace('Covered Lagoon',1, inplace = True)
@@ -220,6 +252,8 @@ df.bayes["Digester Type"].replace('Vertical Plug Flow',2, inplace = True)
 df.bayes["Digester Type"].replace('Plug Flow - Unspecified',2,inplace = True)
 df.bayes["Digester Type"].replace('Complete Mix',3,inplace = True)
 ```
+
+Filtering out outliers. Any row containing daily biogas production per cow outside of two standard deviations is deleleted from the data frame.
 
 ```js
 df.bayes['biogas/dairy'] = df.bayes['Biogas_gen_ft3_day']/df.bayes['Dairy']
@@ -232,6 +266,8 @@ def pred_filter(data):
     
 df_bayes_clean = pred_filter(df.bayes).drop(columns=['biogas/dairy'])
 ```
+
+Naive Bayes machine learning code.
 
 ```js
 X1 = df_bayes_clean.drop(["Biogas_gen_ft3_day"], axis = 1)
@@ -246,7 +282,10 @@ nb.fit(x_train1, y_train1)
 
 y_predicted = nb.predict(x_test1)
 accuracy_score(y_test1, y_predicted)
+```
 
+Function to predict daily biogas production, given an inputted digester type and inputted number of dairy.
+```js
 def biogas_pred_nb(digester_type,dairy):
     biogas = nb.predict([[digester_type,dairy]])
     dairy_eff = nb.predict([[digester_type,dairy]])/dairy/101.336
@@ -257,6 +296,8 @@ biogas_pred_nb(2,5000)
 biogas_pred_nb(3,5000)
 ```
 
+### Random Forest
+Random forest machine learning is completed in this section to predict the daily biogas production from an inputted number of dairy cows and an inputted digester type. Random Forest machine learning can effectively model a continuous regression model.
 
 ```js
 df_forest_clean = df_bayes_clean
@@ -272,7 +313,10 @@ reg = ske.RandomForestRegressor(n_estimators = 1000, random_state = 0)
 Y_train = np.ravel(Y_train)
 reg.fit(X_train, Y_train)
 Y_pred = reg.predict(X_test)
+```
 
+Function to predict daily biogas production, given an inputted digester type and inputted number of dairy.
+```js
 def biogas_pred_rf(digester_type,dairy):
     biogas = reg.predict([[digester_type,dairy]])
     dairy_eff = reg.predict([[digester_type,dairy]])/dairy/101.336
@@ -282,88 +326,11 @@ biogas_pred_rf(1,5000)
 biogas_pred_rf(2,5000)
 biogas_pred_rf(3,5000)
 ```
+The table below features daily biogas predictions (ft3 biogas/day) and digester efficiency percentages for an anaerobic digester operation digesting manure from 5000 dairy cows.
 
+| Digester Type      | Naive Bayes Biogas |Random Forest Biogas|Naive Bayes Digester Efficiency|Random Forest Digester Efficiency|
+|:-------------------|:-------------------|:-------------------|:------------------------------|---------------------------------|
+| Plug flow          | 1,200,000          | 352,651            | 236.8%                        | 69.6%                           |
+| Complete mix       | 432,000            | 325,077            | 85.3%                         | 64.2%                           |
+| Impermeable Cover  | 1,200,000          | 270,735            | 236.8%                        | 53.4%                           |
 
-#### Header 4
-
-*   This is an unordered list following a header.
-*   This is an unordered list following a header.
-*   This is an unordered list following a header.
-
-##### Header 5
-
-1.  This is an ordered list following a header.
-2.  This is an ordered list following a header.
-3.  This is an ordered list following a header.
-
-###### Header 6
-
-| head1        | head two          | three |
-|:-------------|:------------------|:------|
-| ok           | good swedish fish | nice  |
-| out of stock | good and plenty   | nice  |
-| ok           | good `oreos`      | hmm   |
-| ok           | good `zoute` drop | yumm  |
-
-### There's a horizontal rule below this.
-
-* * *
-
-### Here is an unordered list:
-
-*   Item foo
-*   Item bar
-*   Item baz
-*   Item zip
-
-### And an ordered list:
-
-1.  Item one
-1.  Item two
-1.  Item three
-1.  Item four
-
-### And a nested list:
-
-- level 1 item
-  - level 2 item
-  - level 2 item
-    - level 3 item
-    - level 3 item
-- level 1 item
-  - level 2 item
-  - level 2 item
-  - level 2 item
-- level 1 item
-  - level 2 item
-  - level 2 item
-- level 1 item
-
-### Small image
-
-
-### Large image
-
-![Branching](https://guides.github.com/activities/hello-world/branching.png)
-
-
-### Definition lists can be used with HTML syntax.
-
-<dl>
-<dt>Name</dt>
-<dd>Godzilla</dd>
-<dt>Born</dt>
-<dd>1952</dd>
-<dt>Birthplace</dt>
-<dd>Japan</dd>
-<dt>Color</dt>
-<dd>Green</dd>
-</dl>
-
-```
-Long, single-line code blocks should not wrap. They should horizontally scroll if they are too long. This line should be long enough to demonstrate this.
-```
-1
-```
-The final element.
-```
