@@ -34,7 +34,7 @@ Operating covered lagoon digester. Feedstock is not heated or mixed and typicall
 
 The capital cost varies among these three digester types, though their biogas production varies as well. 
 My first question: what is the digestion efficiency of each type of digester? 
-My second question: given a number of livestock and digester type, what is the daily biogas production?
+My second question: given a number of and digester type, what is the daily biogas production?
 
 
 I calculate the efficiency at which each digester type generates biogas using the EPA Agstar Digester Database
@@ -146,6 +146,7 @@ def efficiency(data_dairy):
     
 efficiency(ci95_df5['Biogas_ft3/cow'].mean())
 ```
+Table 1
 | Digester Type      | Efficiency (95% CI)|Efficiency (68% CI) |
 |:-------------------|:-------------------|:-------------------|
 | All digester types | 68.8%              | 65.8%              |
@@ -330,6 +331,7 @@ biogas_pred_rf(3,5000)
 ```
 The table below features daily biogas predictions (ft3 biogas/day) and digester efficiency percentages for an anaerobic digester operation digesting manure from 5000 dairy cows.
 
+Table 2
 | Digester Type      | Naive Bayes Biogas |Random Forest Biogas|Naive Bayes Digester Efficiency|Random Forest Digester Efficiency|
 |:-------------------|:-------------------|:-------------------|:------------------------------|---------------------------------|
 | Plug flow          | 1,200,000          | 352,651            | 236.8%                        | 69.6%                           |
@@ -346,7 +348,13 @@ The daily biogas per animal histogram data is filtered using functions that omit
 This data analysis is completely reproducible and accessable to all of the general public who have access to an internet browser, Excel, and Python. The digester database can be found via a Google search "EPA AgSTAR anaerobic digester database". Then, the database can be uploaded to Python. Next, a user could follow along with this website, sample code from the website, and regenerate the graphs and table values shown in this website. NOTE: Before uploading the digester database Excel spreadsheet to Python, I deleted 3 cells of data containing the value "-" within the column "Electricity Generated (kWh/yr). Data wrangling for this very particular flaw in the dataframe seemed significantly more tedious in Python, so I completed this step in Excel.
 
 ## Conclusion
+America continues to generate a massive amount of CO2e and has been incapable of curbing its dependence on natural gas. Anaerobic digestion can reduce agricultural greenhouse gas emissions and generate renewable, biogenic, natural gas. To increase implementation of anaerobic digestion, profitable scenarios for anaerobic digestion should be modeled. To accurately model anaerobic digestion systems, and to choose the best type of anaerobic digester for a particular situation, the digestion efficiency of each type of anaerobic digester should be well understoood.
 
+This website calculates digestion efficiency for different types of dairy manure-based anaerobic digesters using daily biogas per dairy cow values derived from EPA AgSTAR Anaerobic Digester Database. Efficiency calculations are made by comparing daily biogas per cow values to BMP and manure production values found in California Air Resource Board "Compliance Offset Protocol Livestock Projects" calculator and ASAE standard 384.2, respectively. Digestion efficiencies are summarized in Table 1, where complete mix digesters are between 83% to 86% efficient, plug flow digesters are between 66% to 69% efficient, and covered lagoon (impermeable cover) digesters are between 41% to 43% efficient, when digesting dairy manure alone.  
+
+This website also features linear regressions and confidence intervals for complete mix, plug flow, and covered lagoon digesters where the independent variable is the number of dairy cows and the dependent variable is the daily biogas production. Also, this website demonstrates that there is likely insufficient data to conclude that covered lagoon digesters demonstrate greater energy production per animal in southern states when compared to northern states.
+
+Lastly, machine learning was used to predict daily biogas production given an input of digester type and an input of number of dairy cows. Naive Bayes is a poor machine learning method for continuous regression models featuring relatively small amounts of data (214 datapoints). Naive Bayes predicted digester efficiency values of 237% for plug flow and covered lagoon digesters. Random Forest is a much more effective machine learning method for continuous regression models as featured by digester efficiency values of 70%, 64%, and 53% for 5000 head dairy plug flow, complete mix, and covered lagoon digester operations, respectively. The accuracy or root mean squared error associated with the Random Forest model is still undesirable. More data would likely strengthen the Random Forest model and provide better predictions. Besides getting more data on biogas production from anaerobic digesters, my next steps are to solve for the costs assocatiated with building and operating anaerobic digesters. By having a better understanding of the costs and revenues associated with each type of anaerobic digester, I can better predict which type of anaerobic digester is most profitable for a specific scenario.
 
 
 
